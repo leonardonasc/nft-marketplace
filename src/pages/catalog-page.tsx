@@ -5,7 +5,7 @@ import { Search, SlidersHorizontal, ArrowRight, ChevronLeft, ChevronRight } from
 import MobileNavbar from '@/components/mobile-navbar'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { NftTab } from '@/features/catalog/components/nft-tabs'
 import CatalogHighlights from '@/features/catalog/components/catalog-highlights'
 import CatalogJournal from '@/features/catalog/components/catalog-journal'
@@ -37,10 +37,6 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
 
     const pageCount = Math.max(1, Math.ceil(visibleNfts.length / pageSize))
     const paginatedNfts = visibleNfts.slice((page - 1) * pageSize, page * pageSize)
-
-    useEffect(() => {
-        setPage(1)
-    }, [activeTab, orderBy, search])
 
     if (nftQuery.isLoading) {
         return (
@@ -79,7 +75,7 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
             <header className="mb-4">
                 <div id="catalog-search" className="mb-5 flex w-full min-w-0 items-center gap-2 rounded-xl bg-surface-card px-3 py-2 text-xs text-text-muted md:hidden">
                     <Search className="size-4" />
-                    <input aria-label="Explorar coleções" value={search} onChange={(event) => setSearch(event.target.value)} className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-muted" placeholder="Explorar coleções" />
+                    <input aria-label="Explorar coleções" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1) }} className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-muted" placeholder="Explorar coleções" />
                     <button
                         type="button"
                         aria-label="Abrir filtros"
@@ -130,13 +126,13 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
 
             <section aria-label="NFT catalog" className="mx-auto max-w-7xl">
                 <div className="mb-6 flex items-center justify-between gap-4">
-                    <NftTabs activeTab={activeTab} onChange={setActiveTab} />
+                    <NftTabs activeTab={activeTab} onChange={(tab) => { setActiveTab(tab); setPage(1) }} />
 
                     <label className="flex shrink-0 items-center gap-2 text-xs text-text-muted">
                         <span className="hidden sm:inline">Ordenar por:</span>
                         <select
                             value={orderBy}
-                            onChange={(event) => setOrderBy(event.target.value)}
+                            onChange={(event) => { setOrderBy(event.target.value); setPage(1) }}
                             className="rounded border border-border bg-surface-card px-2 py-2 text-xs text-foreground outline-none"
                         >
                             <option value="recent">Mais recentes</option>

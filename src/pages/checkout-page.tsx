@@ -7,7 +7,7 @@ import SiteFooter from '@/components/site-footer'
 
 export default function CheckoutPage() {
     const [wallet, setWallet] = useState('metamask')
-    const items = useMemo<CartItem[]>(getCartItems, [])
+    const items = useMemo<CartItem[]>(() => getCartItems(), [])
     const subtotal = items.reduce((sum, item) => sum + Number(item.nft.priceEth) * item.quantity, 0)
     const fee = items.length ? 0.016 : 0
 
