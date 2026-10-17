@@ -61,7 +61,7 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
 
         return () => {
             unsubscribe()
-            socket.disconnect()
+            socket?.disconnect()
         }
     }, [])
 
@@ -161,7 +161,7 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
             <div className="mx-auto w-full max-w-7xl">
                 <SiteHeader active={active} />
                 <header className="mb-4">
-                    <div id="catalog-search" className="md:hidden mb-5 flex w-full min-w-0 items-center gap-2 rounded-xl bg-surface-card px-3 py-2 text-xs text-text-muted">
+                    <div id="catalog-search" className="mb-5 flex w-full min-w-0 items-center gap-2 rounded-xl bg-surface-card px-3 py-2 text-xs text-text-muted">
                         <Search className="size-4" />
                         <input aria-label="Explorar coleções" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1) }} className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-muted" placeholder="Explorar coleções" />
                         <button

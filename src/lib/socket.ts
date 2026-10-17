@@ -21,10 +21,13 @@ type RealtimeEvents = {
 let socket: Socket | null = null
 const latestVersions = new Map<string, number>()
 
-export function connectRealtime() {
+export function connectRealtime(): Socket | null {
     if (socket) return socket
 
-    socket = io(window.location.origin, {
+    const realtimeUrl = import.meta.env.VITE_REALTIME_URL || (import.meta.env.DEV ? window.location.origin : '')
+    if (!realtimeUrl) return null
+
+    socket = io(realtimeUrl, {
         path: '/socket.io',
         transports: ['websocket'],
         autoConnect: true,
