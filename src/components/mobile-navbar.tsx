@@ -2,18 +2,24 @@ import { Heart, Home, ScanLine, ShoppingCart, UserRound } from 'lucide-react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { getCartCount } from '@/lib/cart'
+import { getSession } from '@/lib/auth'
 
 export default function MobileNavbar() {
     const [cartCount, setCartCount] = useState(0)
+    const [hasSession, setHasSession] = useState(false)
 
     useEffect(() => {
         const update = () => setCartCount(getCartCount())
+        const updateSession = () => setHasSession(Boolean(getSession()))
         update()
+        updateSession()
         window.addEventListener('kurio-cart-updated', update)
         window.addEventListener('storage', update)
+        window.addEventListener('kurio-session-changed', updateSession)
         return () => {
             window.removeEventListener('kurio-cart-updated', update)
             window.removeEventListener('storage', update)
+            window.removeEventListener('kurio-session-changed', updateSession)
         }
     }, [])
     return (
@@ -34,7 +40,7 @@ export default function MobileNavbar() {
                 <ShoppingCart className="size-5 fill-current" />
                 {cartCount > 0 && <span className="absolute -top-2 -right-2 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-ink">{cartCount}</span>}
             </button>
-            <button type="button" aria-label="Perfil" onClick={() => (window.location.href = '/login')}>
+            <button type="button" aria-label="Perfil" onClick={() => (window.location.href = hasSession ? '/account' : '/login')}>
                 <UserRound className="size-5 fill-current" />
             </button>
         </nav>

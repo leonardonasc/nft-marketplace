@@ -23,3 +23,13 @@ test('valida o checkout antes de criar um pedido', async ({ page }) => {
     await page.getByRole('button', { name: 'Confirmar compra' }).click()
     await expect(page).toHaveURL(/\/checkout$/)
 })
+
+test('exibe favoritos na lista de interesse da conta', async ({ page }) => {
+    await page.addInitScript(() => {
+        localStorage.setItem('kurio_session', JSON.stringify({ username: 'colecionador', email: 'colecionador@kurio.local' }))
+        localStorage.setItem('kurio-favorites', JSON.stringify(['nft-001']))
+    })
+    await page.goto('/account')
+    await page.getByRole('button', { name: 'Lista de interesse' }).click()
+    await expect(page.getByText('Emerald Ape #042')).toBeVisible()
+})
