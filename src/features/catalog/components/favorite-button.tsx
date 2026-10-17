@@ -3,7 +3,7 @@ import { Heart } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { isFavorite, toggleFavorite } from '@/lib/favorites'
 
-export default function FavoriteButton({ nftId }: { nftId: string }) {
+export default function FavoriteButton({ nftId, hideWhenInactive = false }: { nftId: string; hideWhenInactive?: boolean }) {
     const [favorite, setFavorite] = useState(false)
 
     useEffect(() => {
@@ -19,6 +19,8 @@ export default function FavoriteButton({ nftId }: { nftId: string }) {
         }
     }, [nftId])
 
+    if (hideWhenInactive && !favorite) return null
+
     return (
         <Button
             variant="ghost"
@@ -29,7 +31,7 @@ export default function FavoriteButton({ nftId }: { nftId: string }) {
                 setFavorite(toggleFavorite(nftId))
             }}
         >
-            <Heart className={`rounded-full border border-border-soft p-1 size-8 ${favorite ? 'fill-amber text-amber' : 'bg-border text-amber'}`} />
+            <Heart className={`rounded-full border border-border-soft p-1 size-8 ${favorite ? ' text-amber bg-border' : ''}`} />
         </Button>
     )
 }

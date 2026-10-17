@@ -92,42 +92,73 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
                         </button>
                     </div>
 
+
                     <div className="relative mb-8 h-[190px] w-full min-w-0 overflow-hidden rounded-[2rem] bg-[#271812] px-5 py-3 sm:h-[215px] sm:px-7 sm:py-4 md:h-[373px] md:rounded-none md:bg-[#160d0a] md:px-0 md:py-8">
-                        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_8%_18%,rgba(190,119,57,.48)_0_16%,transparent_16.4%),radial-gradient(circle_at_38%_8%,rgba(130,77,35,.42)_0_22%,transparent_22.4%),radial-gradient(circle_at_22%_92%,rgba(190,119,57,.34)_0_24%,transparent_24.4%),radial-gradient(circle_at_72%_78%,rgba(130,77,35,.42)_0_28%,transparent_28.4%),radial-gradient(circle_at_100%_20%,rgba(190,119,57,.28)_0_20%,transparent_20.4%)] md:hidden" />
-                        <span className="pointer-events-none absolute -top-24 left-[10%] size-64 rounded-full bg-primary/20 blur-sm md:hidden" />
-                        <span className="pointer-events-none absolute -bottom-32 left-[28%] size-80 rounded-full bg-[#a46737]/25 blur-sm md:hidden" />
-                        <span className="pointer-events-none absolute -right-24 top-8 size-72 rounded-full bg-[#8c542d]/25 blur-sm md:hidden" />
-                        <span className="pointer-events-none absolute right-[28%] -bottom-40 size-96 rounded-full bg-primary/15 blur-sm md:hidden" />
+
+                        {/* Fundo mobile: somente duas formas circulares cruzadas */}
+                        <div className="pointer-events-none absolute inset-0 overflow-hidden md:hidden">
+                            <span className="absolute -left-[12%] -top-[75%] size-[280px] rounded-full bg-[#9b6137]/45" />
+                            <span className="absolute -bottom-[105%] left-[18%] size-[330px] rounded-full bg-[#704323]/45" />
+                        </div>
+
+                        {/* Conteúdo */}
                         <div className="relative z-10 w-[54%] md:w-[52%] md:pt-5">
-                            <p className="mb-3 text-[10px] text-foreground md:mb-4 md:text-xs">Bem-vindo à Kurio</p>
-                            <h1 className="text-[19px] font-bold leading-[1.25] tracking-wide text-foreground sm:text-[22px] md:text-5xl md:leading-[1.6] lg:text-6xl lg:leading-[1]">
-                                <span className="md:hidden">SEJA DONO DA CULTURA DIGITAL</span>
-                                <span className="hidden md:inline">SEJA DONO DO FUTURO DA ARTE DIGITAL</span>
-                            </h1>
-                            <p className="mt-2 text-[10px] leading-[1.35] text-text-muted sm:text-[11px] md:mt-4 md:max-w-[640px] md:text-sm md:leading-5">
-                                <span className="md:hidden">Descubra NFTs selecionados de criadores do mundo todo.</span>
-                                <span className="hidden md:inline">Descubra NFTs selecionados de criadores emergentes e consagrados. Colecione arte digital rara, apoie artistas e tenha uma parte da cultura da internet.</span>
+                            <p className="mb-3 text-[10px] text-foreground md:mb-4 md:text-xs">
+                                Bem-vindo à Kurio
                             </p>
-                            <button type="button" onClick={() => (window.location.href = '/mercado')} className="mt-1 flex items-center gap-1 text-xs font-bold text-primary md:mt-6 md:rounded md:bg-primary md:px-5 md:py-2 md:text-xs md:text-ink">
-                                EXPLORAR <ArrowRight className="size-3" />
+
+                            <h1 className="text-[19px] font-bold leading-[1.25] tracking-wide text-foreground sm:text-[22px] md:text-5xl md:leading-[1.6] lg:text-6xl lg:leading-[1]">
+                                <span className="md:hidden">
+                                    SEJA DONO DA CULTURA DIGITAL
+                                </span>
+                                <span className="hidden md:inline">
+                                    SEJA DONO DO FUTURO DA ARTE DIGITAL
+                                </span>
+                            </h1>
+
+                            <p className="mt-2 text-[10px] leading-[1.35] text-text-muted sm:text-[11px] md:mt-4 md:max-w-[640px] md:text-sm md:leading-5">
+                                <span className="md:hidden">
+                                    Descubra NFTs selecionados de criadores do mundo todo.
+                                </span>
+                                <span className="hidden md:inline">
+                                    Descubra NFTs selecionados de criadores emergentes e consagrados.
+                                    Colecione arte digital rara, apoie artistas e tenha uma parte da
+                                    cultura da internet.
+                                </span>
+                            </p>
+
+                            <button
+                                type="button"
+                                onClick={() => (window.location.href = "/mercado")}
+                                className="mt-1 flex items-center gap-1 text-xs font-bold text-primary md:mt-6 md:rounded md:bg-primary md:px-5 md:py-2 md:text-xs md:text-ink"
+                            >
+                                EXPLORAR
+                                <ArrowRight className="size-3" />
                             </button>
                         </div>
+
+                        {/* Imagem principal */}
                         <img
                             src="/images/nft-001.png"
-                            alt="Coleção de macacos digitais"
-                            className="absolute top-3 right-3 z-0 h-[112px] w-[112px] rounded-xl object-cover sm:top-4 sm:right-4 sm:h-[135px] sm:w-[135px] md:top-0 md:right-0 md:h-[340px] md:w-[340px] md:max-h-none md:max-w-none"
+                            alt="NFT principal da coleção"
+                            className="absolute right-3 top-3 z-0 size-[112px] rounded-xl object-cover sm:right-4 sm:top-4 sm:size-[135px] md:right-0 md:top-0 md:size-[340px] md:max-h-none md:max-w-none"
                         />
+
+                        {/* Imagem secundária: encaixada no canto inferior esquerdo */}
                         <img
-                            src="/images/nft-001.png"
+                            src="/images/nft-002.png"
                             alt="Outro NFT da coleção"
-                            className="absolute right-[24%] bottom-4 z-10 size-[43px] rounded-xl object-cover shadow-lg sm:right-[25%] sm:size-[48px] md:hidden"
+                            className="absolute right-[calc(12px+112px-55px)] top-[calc(12px+112px-30px)] z-10 size-[43px] rounded-xl object-cover shadow-lg sm:right-[calc(16px+135px-48px)] sm:top-[calc(16px+135px-48px)] sm:size-[48px] md:hidden"
                         />
+
+                        {/* Indicadores */}
                         <div className="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 gap-2 md:bottom-8">
                             <span className="size-2 rounded-full bg-amber" />
                             <span className="size-2 rounded-full bg-amber/60" />
                             <span className="size-2 rounded-full bg-amber/60" />
                         </div>
                     </div>
+
                 </header>
 
                 <section aria-label="NFT catalog" className="mx-auto max-w-7xl">

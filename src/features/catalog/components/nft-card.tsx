@@ -28,7 +28,7 @@ export default function NftCard({ id, imageUrl, name, priceEth, isRare = false }
           className="absolute top-4 right-2"
           onClick={(event) => event.stopPropagation()}
         >
-          <FavoriteButton nftId={id} />
+          <FavoriteButton nftId={id} hideWhenInactive />
         </div>
       </div>
 
