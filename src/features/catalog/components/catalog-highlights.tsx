@@ -15,8 +15,12 @@ export default function CatalogHighlights() {
             {highlights.map((highlight) => (
                 <article key={highlight.title} className="flex min-h-[174px] overflow-hidden rounded-md bg-[#241510]">
                     <img
-                        src="/images/nft-001.png"
+                        src="/images/nft-001.webp"
                         alt=""
+                        width={1254}
+                        height={1254}
+                        loading="lazy"
+                        decoding="async"
                         className="w-[48%] object-cover"
                     />
                     <div className="flex flex-1 flex-col items-center justify-center px-4 text-center">

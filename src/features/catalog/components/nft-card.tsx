@@ -6,9 +6,10 @@ interface NftCardProps {
   name: string;
   priceEth: string;
   isRare?: boolean;
+  priority?: boolean;
 }
 
-export default function NftCard({ id, imageUrl, name, priceEth, isRare = false }: NftCardProps) {
+export default function NftCard({ id, imageUrl, name, priceEth, isRare = false, priority = false }: NftCardProps) {
   return (
     <article
       className="flex min-w-0 cursor-pointer flex-col gap-2 self-start md:mt-0 max-md:even:mt-8"
@@ -21,6 +22,11 @@ export default function NftCard({ id, imageUrl, name, priceEth, isRare = false }
         <img
           src={imageUrl}
           alt={name}
+          width={1254}
+          height={1254}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          decoding="async"
           className="aspect-square w-full rounded-xl object-cover"
         />
 

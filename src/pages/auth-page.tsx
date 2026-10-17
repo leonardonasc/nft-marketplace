@@ -2,7 +2,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebookF } from 'react-icons/fa'
-import { loginAccount, loginWithProvider, registerAccount } from '@/lib/auth'
+import { loginAccount, registerAccount } from '@/lib/auth'
 
 type AuthPageProps = { mode: 'login' | 'register' }
 
@@ -41,15 +41,6 @@ export default function AuthPage({ mode }: AuthPageProps) {
 
         try {
             await loginAccount(email, password)
-            window.location.href = '/'
-        } catch (error) {
-            setNotice(getAuthError(error))
-        }
-    }
-
-    async function handleSocialLogin(provider: string) {
-        try {
-            await loginWithProvider(provider)
             window.location.href = '/'
         } catch (error) {
             setNotice(getAuthError(error))
@@ -116,7 +107,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                 <div className="mx-auto max-w-75 space-y-2">
                     <button
                         type="button"
-                        onClick={() => handleSocialLogin('Google')}
+                        onClick={() => ('')}
                         className="flex w-full items-center justify-center gap-3 rounded-md border border-border py-3 text-xs text-secondary transition-colors hover:bg-white/5"
                     >
                         <FcGoogle size={16} />
@@ -125,7 +116,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
 
                     <button
                         type="button"
-                        onClick={() => handleSocialLogin('Facebook')}
+                        onClick={() => ('')}
                         className="flex w-full items-center justify-center gap-3 rounded-md border border-border py-3 text-xs text-secondary transition-colors hover:bg-white/5"
                     >
                         <FaFacebookF size={15} className="text-[#1877F2]" />

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.org",
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Kurio",
+  "description": "Marketplace de NFTs de criadores digitais selecionados.",
+  "inLanguage": "pt-BR",
+  "url": "https://nft-marketplace-kappa-livid.vercel.app/",
+  "hasPart": [
+    {
+      "@type": "WebPage",
+      "name": "Mercado",
+      "url": "https://nft-marketplace-kappa-livid.vercel.app/mercado"
+    },
+    {
+      "@type": "WebPage",
+      "name": "Aprenda",
+      "url": "https://nft-marketplace-kappa-livid.vercel.app/learn"
+    }
+  ]
+}

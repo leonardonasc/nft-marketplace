@@ -37,7 +37,7 @@ export default function NftDetailPage({ id }: NftDetailPageProps) {
             </header>
 
             <section className="mx-auto grid max-w-7xl overflow-hidden rounded-3xl bg-surface-card md:grid-cols-2">
-                <img src={nft.imageUrl} alt={nft.name} className="aspect-square w-full object-cover" />
+                <img src={nft.imageUrl} alt={nft.name} width={1254} height={1254} fetchPriority="high" decoding="async" className="aspect-square w-full object-cover" />
 
                 <div className="space-y-3 p-4">
                     <div className="flex items-center justify-between">
@@ -59,9 +59,9 @@ export default function NftDetailPage({ id }: NftDetailPageProps) {
                     <div className="flex items-center justify-between border-t border-border pt-3">
                         <div className="flex items-center gap-2 text-[10px]">
                             <span>Qtd.</span>
-                            <button type="button" aria-label="Diminuir quantidade" disabled={quantity === 1} onClick={() => setQuantity((value) => Math.max(1, value - 1))} className="flex size-5 items-center justify-center rounded-full bg-primary text-ink"><Minus className="size-3" /></button>
+                            <button type="button" aria-label="Diminuir quantidade" disabled={quantity === 1} onClick={() => setQuantity((value) => Math.max(1, value - 1))} className="flex size-8 items-center justify-center rounded-full bg-primary text-ink"><Minus className="size-3" /></button>
                             <span>{quantity}</span>
-                            <button type="button" aria-label="Aumentar quantidade" disabled={quantity >= nft.availableQuantity} onClick={() => setQuantity((value) => Math.min(nft.availableQuantity, value + 1))} className="flex size-5 items-center justify-center rounded-full bg-primary text-ink"><Plus className="size-3" /></button>
+                            <button type="button" aria-label="Aumentar quantidade" disabled={quantity >= nft.availableQuantity} onClick={() => setQuantity((value) => Math.min(nft.availableQuantity, value + 1))} className="flex size-8 items-center justify-center rounded-full bg-primary text-ink"><Plus className="size-3" /></button>
                         </div>
                         <strong className="text-sm text-amber">{total} ETH</strong>
                     </div>

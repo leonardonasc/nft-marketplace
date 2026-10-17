@@ -1,0 +1,15 @@
+# Kurio NFT Marketplace
+
+> Kurio is a Portuguese-language marketplace for discovering and collecting curated digital NFTs.
+
+## Main pages
+
+- [Home](https://nft-marketplace-kappa-livid.vercel.app/)
+- [Marketplace](https://nft-marketplace-kappa-livid.vercel.app/mercado)
+- [Learn](https://nft-marketplace-kappa-livid.vercel.app/learn)
+
+## Important notes
+
+- Prices are displayed in ETH.
+- NFT availability and prices are illustrative marketplace data.
+- Users can browse NFTs, save favorites, add items to a cart, and complete a simulated checkout.

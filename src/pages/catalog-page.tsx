@@ -218,14 +218,22 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
                         </div>
 
                         <img
-                            src="/images/nft-001.png"
+                            src="/images/nft-001.webp"
                             alt="NFT principal da coleção"
+                            width={1254}
+                            height={1254}
+                            fetchPriority="high"
+                            decoding="async"
                             className="absolute right-3 top-3 z-0 size-[112px] rounded-xl object-cover sm:right-4 sm:top-4 sm:size-[135px] md:right-0 md:top-0 md:size-[340px] md:max-h-none md:max-w-none"
                         />
 
                         <img
-                            src="/images/nft-002.png"
+                            src="/images/nft-002.webp"
                             alt="Outro NFT da coleção"
+                            width={1254}
+                            height={1254}
+                            loading="lazy"
+                            decoding="async"
                             className="absolute right-[calc(12px+112px-55px)] top-[calc(12px+112px-30px)] z-10 size-[43px] rounded-xl object-cover shadow-lg sm:right-[calc(16px+135px-48px)] sm:top-[calc(16px+135px-48px)] sm:size-[48px] md:hidden"
                         />
 
@@ -248,7 +256,7 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
                                 <h2 className="pt-4 text-center text-sm font-bold text-primary">NFT EM DESTAQUE</h2>
                                 <p className="px-2 py-2 text-center text-xs font-bold text-foreground">OFERTA LIMITADA</p>
                                 <img
-                                    src="/images/nft-001.png"
+                                    src="/images/nft-001.webp"
                                     alt="NFT em destaque"
                                     className="w-full rounded-xl object-cover"
                                 />
@@ -282,7 +290,7 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
                             </div>
 
                             <div className="grid grid-cols-2 items-start gap-x-4 gap-y-6 md:grid-cols-3 md:gap-5">
-                                {paginatedNfts.map((nft) => (
+                                {paginatedNfts.map((nft, index) => (
                                     <NftCard
                                         key={nft.id}
                                         id={nft.id}
@@ -290,6 +298,7 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
                                         name={nft.name}
                                         priceEth={nft.priceEth}
                                         isRare={nft.isRare}
+                                        priority={index === 0}
                                     />
                                 ))}
                                 {visibleNfts.length === 0 && <p className="col-span-full py-8 text-center text-xs text-text-muted">Nenhum NFT encontrado.</p>}

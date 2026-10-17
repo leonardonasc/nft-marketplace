@@ -1,27 +1,27 @@
 const articles = [
     {
-        image: '/images/nft-001.png',
+        image: '/images/nft-001.webp',
         date: '12 de setembro',
         reading: 'Leitura de 6 min',
         title: 'Como funciona a propriedade de NFTs',
         description: 'Aprenda a colecionar, negociar e verificar ativos digitais.',
     },
     {
-        image: '/images/nft-002.png',
+        image: '/images/nft-002.webp',
         date: '13 de setembro',
         reading: 'Leitura de 2 min',
         title: '10 artistas digitais para acompanhar',
         description: 'Conheça criadores que moldam a cultura digital.',
     },
     {
-        image: '/images/nft-003.png',
+        image: '/images/nft-003.webp',
         date: '15 de setembro',
         reading: 'Leitura de 3 min',
         title: 'Raridade, atributos e procedência',
         description: 'Entenda raridade, procedência, direitos autorais e utilidade.',
     },
     {
-        image: '/images/nft-004.png',
+        image: '/images/nft-004.webp',
         date: '15 de setembro',
         reading: 'Leitura de 2 min',
         title: 'Como proteger sua carteira',
@@ -47,6 +47,10 @@ export default function CatalogJournal() {
                         <img
                             src={article.image}
                             alt="imagem ilustrativa do artigo"
+                            width={1254}
+                            height={928}
+                            loading="lazy"
+                            decoding="async"
                             className="aspect-[1.35] w-full object-cover"
                         />
                         <div className="p-3">

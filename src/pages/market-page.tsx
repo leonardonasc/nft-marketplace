@@ -59,10 +59,10 @@ export default function MarketPage() {
                     <section>
                         <div className="mb-5 flex items-center justify-between border-b border-border pb-3"><h1 className="font-bold">NFTs ({visibleNfts.length})</h1><select value={orderBy} onChange={(event) => setOrderBy(event.target.value)} className="rounded border border-border bg-surface-card px-2 py-2 text-xs text-secondary"><option value="recent">Mais recentes</option><option value="price-asc">Menor preço</option><option value="price-desc">Maior preço</option></select></div>
                         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                            {visibleNfts.map((nft) => (
+                            {visibleNfts.map((nft, index) => (
                                 <article key={nft.id} className="bg-surface-card p-2">
                                     <button type="button" className="block w-full text-left" onClick={() => (window.location.href = `/nft/${nft.id}`)}>
-                                        <div className="relative"><img src={nft.imageUrl} alt={nft.name} className="aspect-square w-full rounded-xl object-cover" />{nft.isRare && <span className="absolute top-0 left-0 bg-primary px-3 py-2 text-xs font-bold text-ink">RARO</span>}</div>
+                                        <div className="relative"><img src={nft.imageUrl} alt={nft.name} width={1254} height={1254} loading={index === 0 ? 'eager' : 'lazy'} fetchPriority={index === 0 ? 'high' : 'auto'} decoding="async" className="aspect-square w-full rounded-xl object-cover" />{nft.isRare && <span className="absolute top-0 left-0 bg-primary px-3 py-2 text-xs font-bold text-ink">RARO</span>}</div>
                                         <h2 className="mt-2 truncate text-xs font-bold">{nft.name}</h2><p className="text-xs text-primary">{nft.priceEth} ETH</p>
                                     </button>
                                     <button type="button" onClick={() => handleAdd(nft.id)} className="mt-3 w-full rounded bg-primary py-2 text-[10px] font-bold text-ink">{added === nft.id ? 'Adicionado' : 'Adicionar ao carrinho'}</button>
