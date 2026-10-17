@@ -1,23 +1,27 @@
 const articles = [
     {
+        image: '/images/nft-001.png',
         date: '12 de setembro',
         reading: 'Leitura de 6 min',
         title: 'Como funciona a propriedade de NFTs',
         description: 'Aprenda a colecionar, negociar e verificar ativos digitais.',
     },
     {
+        image: '/images/nft-002.png',
         date: '13 de setembro',
         reading: 'Leitura de 2 min',
         title: '10 artistas digitais para acompanhar',
         description: 'Conheça criadores que moldam a cultura digital.',
     },
     {
+        image: '/images/nft-003.png',
         date: '15 de setembro',
         reading: 'Leitura de 3 min',
         title: 'Raridade, atributos e procedência',
         description: 'Entenda raridade, procedência, direitos autorais e utilidade.',
     },
     {
+        image: '/images/nft-004.png',
         date: '15 de setembro',
         reading: 'Leitura de 2 min',
         title: 'Como proteger sua carteira',
@@ -41,21 +45,21 @@ export default function CatalogJournal() {
                 {articles.map((article) => (
                     <article key={article.title} className="overflow-hidden rounded-md bg-[#241510]">
                         <img
-                            src="/images/nft-001.png"
-                            alt=""
+                            src={article.image}
+                            alt="imagem ilustrativa do artigo"
                             className="aspect-[1.35] w-full object-cover"
                         />
                         <div className="p-3">
-                            <p className="text-[9px] text-text-muted">
+                            <p className="text-xs text-text-muted">
                                 {article.date} <span className="mx-1">|</span> {article.reading}
                             </p>
-                            <h3 className="mt-2 text-xs font-bold leading-4 text-foreground">
+                            <h3 className="mt-2 text-md font-bold leading-4 text-foreground">
                                 {article.title}
                             </h3>
-                            <p className="mt-2 text-[9px] leading-4 text-text-muted">
+                            <p className="mt-2 text-xs leading-4 text-text-muted">
                                 {article.description}
                             </p>
-                            <button type="button" className="mt-2 text-[9px] font-bold text-primary">
+                            <button type="button" onClick={() => (window.location.href = '/learn')} className="mt-2 text-[9px] font-bold text-primary">
                                 Ler mais →
                             </button>
                         </div>

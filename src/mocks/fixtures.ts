@@ -9,6 +9,7 @@ export const nftFixtures: Nft[] = [
         priceEth: '0.42',
         availableQuantity: 5,
         creator: 'Nova Studio',
+        network: 'Ethereum',
     },
     {
         id: 'nft-002',
@@ -18,6 +19,7 @@ export const nftFixtures: Nft[] = [
         priceEth: '1.69',
         availableQuantity: 3,
         creator: 'NeonForge',
+        network: 'Polygon',
     },
     {
         id: 'nft-003',
@@ -27,6 +29,7 @@ export const nftFixtures: Nft[] = [
         priceEth: '2.12',
         availableQuantity: 2,
         creator: 'Nova Studio',
+        network: 'Ethereum',
         isRare: true,
     },
     {
@@ -37,6 +40,7 @@ export const nftFixtures: Nft[] = [
         priceEth: '1.84',
         availableQuantity: 4,
         creator: 'Nova Studio',
+        network: 'Ethereum',
     },
     {
         id: 'nft-005',
@@ -46,6 +50,7 @@ export const nftFixtures: Nft[] = [
         priceEth: '1.29',
         availableQuantity: 6,
         creator: 'Nova Studio',
+        network: 'Solana',
     },
     {
         id: 'nft-006',
@@ -55,6 +60,7 @@ export const nftFixtures: Nft[] = [
         priceEth: '1.39',
         availableQuantity: 6,
         creator: 'NeonForge',
+        network: 'Polygon',
     },
     {
         id: 'nft-007',
@@ -64,6 +70,7 @@ export const nftFixtures: Nft[] = [
         priceEth: '1.79',
         availableQuantity: 9,
         creator: 'Nova Studio',
+        network: 'Ethereum',
         isRare: true,
     },
     {
@@ -74,6 +81,7 @@ export const nftFixtures: Nft[] = [
         priceEth: '0.99',
         availableQuantity: 4,
         creator: 'Nova Studio',
+        network: 'Solana',
     },
     {
         id: 'nft-009',
@@ -83,6 +91,7 @@ export const nftFixtures: Nft[] = [
         priceEth: '0.39',
         availableQuantity: 3,
         creator: 'Nova Studio',
+        network: 'Ethereum',
     },
     {
         id: 'nft-010',
@@ -92,6 +101,7 @@ export const nftFixtures: Nft[] = [
         priceEth: '2.29',
         availableQuantity: 2,
         creator: 'NeonForge',
+        network: 'Polygon',
         isRare: true,
     },
 ]

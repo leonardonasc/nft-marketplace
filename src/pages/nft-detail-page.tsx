@@ -13,8 +13,12 @@ type NftDetailPageProps = {
 }
 
 export default function NftDetailPage({ id }: NftDetailPageProps) {
-    const nft = nftFixtures.find((item) => item.id === id) ?? nftFixtures[0]
     const [quantity, setQuantity] = useState(1)
+    const nft = nftFixtures.find((item) => item.id === id)
+
+    if (!nft) {
+        return <main className="min-h-screen bg-ink px-4 py-8 text-foreground"><SiteHeader active="Mercado" /><section className="mx-auto max-w-xl bg-surface-card p-10 text-center"><h1 className="font-bold">NFT não encontrado</h1><p className="mt-2 text-sm text-text-muted">Esse ativo não está disponível no catálogo.</p><button type="button" onClick={() => (window.location.href = '/mercado')} className="mt-6 rounded bg-primary px-5 py-3 text-xs font-bold text-ink">Voltar ao Mercado</button></section><SiteFooter /><MobileNavbar /></main>
+    }
     const total = (Number(nft.priceEth) * quantity).toFixed(2)
 
     return (

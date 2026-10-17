@@ -5,6 +5,7 @@ import CartPage from '../pages/cart-page'
 import CheckoutPage from '../pages/checkout-page'
 import ConfirmationPage from '../pages/confirmation-page'
 import MarketPage from '../pages/market-page'
+import FavoritesPage from '../pages/favorites-page'
 
 export default function AppRouter() {
 	const path = window.location.pathname
@@ -17,6 +18,7 @@ export default function AppRouter() {
 	if (path === '/cart') return <CartPage />
 	if (path === '/checkout') return <CheckoutPage />
 	if (path === '/confirmation') return <ConfirmationPage />
+	if (path === '/favorites') return <FavoritesPage />
 	if (path === '/creators') return <CatalogPage active="Criadores" />
 	if (path === '/learn') return <CatalogPage active="Aprenda" />
 

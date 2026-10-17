@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { getCartCount } from '@/lib/cart'
 
 export default function MobileNavbar() {
-    const [favorites, setFavorites] = useState(false)
     const [cartCount, setCartCount] = useState(0)
 
     useEffect(() => {
@@ -25,10 +24,10 @@ export default function MobileNavbar() {
             <button type="button" aria-label="Início" className="text-primary" onClick={() => (window.location.href = '/')}>
                 <Home className="size-5 fill-current" />
             </button>
-            <button type="button" aria-label="Favoritos" onClick={() => setFavorites((value) => !value)} className={favorites ? 'text-primary' : undefined}>
+            <button type="button" aria-label="Favoritos" onClick={() => (window.location.href = '/favorites')}>
                 <Heart className="size-5 fill-current" />
             </button>
-            <button type="button" aria-label="Criar ou escanear NFT" className="-mt-8 flex size-14 items-center justify-center rounded-full border-4 border-ink bg-primary text-ink shadow-lg">
+            <button type="button" aria-label="Criar ou escanear NFT" onClick={() => (window.location.href = '/creators')} className="-mt-8 flex size-14 items-center justify-center rounded-full border-4 border-ink bg-primary text-ink shadow-lg">
                 <ScanLine className="size-6" />
             </button>
             <button type="button" aria-label="Compras" onClick={() => (window.location.href = '/cart')} className="relative">

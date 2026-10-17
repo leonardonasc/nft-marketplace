@@ -40,7 +40,9 @@ export function removeFromCart(nftId: string) {
 }
 
 export function updateCartQuantity(nftId: string, quantity: number) {
-    saveCart(getCartItems().map((item) => item.nft.id === nftId ? { ...item, quantity } : item).filter((item) => item.quantity > 0))
+    saveCart(getCartItems().map((item) => item.nft.id === nftId
+        ? { ...item, quantity: Math.min(item.nft.availableQuantity, quantity) }
+        : item).filter((item) => item.quantity > 0))
 }
 
 export function getCartCount() {

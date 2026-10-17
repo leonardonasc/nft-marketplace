@@ -20,13 +20,13 @@ export default function CatalogHighlights() {
                         className="w-[48%] object-cover"
                     />
                     <div className="flex flex-1 flex-col items-center justify-center px-4 text-center">
-                        <h2 className="whitespace-pre-line text-xs md:text-lg font-bold leading-5 text-foreground">
+                        <h2 className="whitespace-pre-line text-[10px] md:text-lg font-bold leading-5 text-foreground">
                             {highlight.title}
                         </h2>
-                        <p className="mt-3 text-xs md:text-sm leading-4 text-text-muted">
+                        <p className="mt-3 text-[10px] md:text-sm leading-4 text-text-muted">
                             {highlight.description}
                         </p>
-                        <button type="button" className="mt-3 rounded bg-primary px-3 py-1 text-[10px] font-bold text-ink">
+                        <button type="button" onClick={() => (window.location.href = '/mercado')} className="mt-3 rounded bg-primary px-3 py-1 text-[10px] font-bold text-ink">
                             Explorar →
                         </button>
                     </div>

@@ -6,6 +6,7 @@ export type Nft = {
     priceEth: string
     availableQuantity: number
     creator: string
+    network?: 'Ethereum' | 'Polygon' | 'Solana'
     isRare?: boolean
 }
 

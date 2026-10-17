@@ -1,18 +1,24 @@
 import { Search, ShoppingCart, UserRound } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { getCartCount } from '@/lib/cart'
+import { clearSession, getSession, type Session } from '@/lib/auth'
 
 export default function SiteHeader({ active = 'Mercado' }: { active?: string }) {
     const [cartCount, setCartCount] = useState(0)
+    const [session, setSession] = useState<Session | null>(null)
 
     useEffect(() => {
         const update = () => setCartCount(getCartCount())
         update()
+        const updateSession = () => setSession(getSession())
+        updateSession()
         window.addEventListener('kurio-cart-updated', update)
         window.addEventListener('storage', update)
+        window.addEventListener('kurio-session-changed', updateSession)
         return () => {
             window.removeEventListener('kurio-cart-updated', update)
             window.removeEventListener('storage', update)
+            window.removeEventListener('kurio-session-changed', updateSession)
         }
     }, [])
 
@@ -34,7 +40,7 @@ export default function SiteHeader({ active = 'Mercado' }: { active?: string }) 
             <div className="flex items-center gap-3 md:gap-4">
                 <button type="button" aria-label="Pesquisar" onClick={() => { window.location.href = '/#catalog-search' }}><Search className="size-5 md:size-4" /></button>
                 <button type="button" aria-label={`Carrinho${cartCount ? `, ${cartCount} itens` : ''}`} onClick={() => (window.location.href = '/cart')} className="relative"><ShoppingCart className="size-5 md:size-4" />{cartCount > 0 && <span className="absolute -top-2 -right-2 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-ink">{cartCount}</span>}</button>
-                <button type="button" onClick={() => (window.location.href = '/login')} className="rounded bg-primary px-4 py-2 text-xs text-ink md:text-[12px]"><UserRound className="mr-1 inline size-3" /> Entrar</button>
+                <button type="button" onClick={() => session ? clearSession() : (window.location.href = '/login')} className="rounded bg-primary px-4 py-2 text-xs text-ink md:text-[12px]"><UserRound className="mr-1 inline size-3" /> {session ? session.username : 'Entrar'}</button>
             </div>
         </header>
     )
