@@ -94,11 +94,11 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
                     <span className="pointer-events-none absolute right-[28%] -bottom-40 size-96 rounded-full bg-primary/15 blur-sm md:hidden" />
                     <div className="relative z-10 w-[54%] md:w-[52%] md:pt-5">
                         <p className="mb-3 text-[10px] text-foreground md:mb-4 md:text-xs">Bem-vindo à Kurio</p>
-                        <h1 className="text-[19px] font-bold leading-[1.25] tracking-wide text-foreground sm:text-[22px] md:text-4xl md:leading-[1.6] lg:text-5xl lg:leading-[1.35]">
+                        <h1 className="text-[19px] font-bold leading-[1.25] tracking-wide text-foreground sm:text-[22px] md:text-5xl md:leading-[1.6] lg:text-6xl lg:leading-[1]">
                             <span className="md:hidden">SEJA DONO DA CULTURA DIGITAL</span>
                             <span className="hidden md:inline">SEJA DONO DO FUTURO DA ARTE DIGITAL</span>
                         </h1>
-                        <p className="mt-2 text-[10px] leading-[1.35] text-text-muted sm:text-[11px] md:mt-4 md:max-w-[440px] md:text-xs md:leading-5">
+                        <p className="mt-2 text-[10px] leading-[1.35] text-text-muted sm:text-[11px] md:mt-4 md:max-w-[640px] md:text-sm md:leading-5">
                             <span className="md:hidden">Descubra NFTs selecionados de criadores do mundo todo.</span>
                             <span className="hidden md:inline">Descubra NFTs selecionados de criadores emergentes e consagrados. Colecione arte digital rara, apoie artistas e tenha uma parte da cultura da internet.</span>
                         </p>
@@ -125,31 +125,14 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
             </header>
 
             <section aria-label="NFT catalog" className="mx-auto max-w-7xl">
-                <div className="mb-6 flex items-center justify-between gap-4">
-                    <NftTabs activeTab={activeTab} onChange={(tab) => { setActiveTab(tab); setPage(1) }} />
-
-                    <label className="flex shrink-0 items-center gap-2 text-xs text-text-muted">
-                        <span className="hidden sm:inline">Ordenar por:</span>
-                        <select
-                            value={orderBy}
-                            onChange={(event) => { setOrderBy(event.target.value); setPage(1) }}
-                            className="rounded border border-border bg-surface-card px-2 py-2 text-xs text-foreground outline-none"
-                        >
-                            <option value="recent">Mais recentes</option>
-                            <option value="price-asc">Menor preço</option>
-                            <option value="price-desc">Maior preço</option>
-                        </select>
-                    </label>
-                </div>
-
                 <div className="grid grid-cols-2 items-start gap-x-4 gap-y-6 md:grid-cols-[170px_1fr] lg:grid-cols-[210px_1fr]">
                     <aside className={`${filtersOpen ? 'block' : 'hidden'} rounded-sm bg-surface-card p-4 text-[10px] text-secondary md:block`}>
-                        <h2 className="mb-4 font-bold text-foreground">Coleções</h2>
-                        <ul className="space-y-3"><li>Arte digital <span className="float-right">(33)</span></li><li>Fotografia <span className="float-right">(12)</span></li><li>Música <span className="float-right">(65)</span></li><li>Arte 3D <span className="float-right">(39)</span></li><li>Generativa <span className="float-right">(17)</span></li><li>Jogos <span className="float-right">(19)</span></li></ul>
+                        <h2 className="mb-4 font-bold text-foreground text-lg">Coleções</h2>
+                        <ul className="space-y-3 text-sm"><li>Arte digital <span className="float-right">(33)</span></li><li>Fotografia <span className="float-right">(12)</span></li><li>Música <span className="float-right">(65)</span></li><li>Arte 3D <span className="float-right">(39)</span></li><li>Generativa <span className="float-right">(17)</span></li><li>Jogos <span className="float-right">(19)</span></li></ul>
                         <h2 className="mt-8 mb-3 font-bold text-foreground">Faixa de preço</h2><div className="h-1 rounded bg-primary" /><p className="mt-3 text-secondary">Preço: 0,02 - 12,30 ETH</p><button className="mt-4 rounded bg-primary px-3 py-1 text-ink">Aplicar</button>
 
-                        <h2 className="mt-8 mb-3 font-bold text-foreground">Rede</h2>
-                        <ul className="space-y-3"><li>Ethereum <span className="float-right">(119)</span></li><li>Polygon <span className="float-right">(78)</span></li><li>Solana <span className="float-right">(86)</span></li></ul>
+                        <h2 className="mt-8 mb-3 font-bold text-foreground text-lg">Rede</h2>
+                        <ul className="space-y-3 text-sm"><li>Ethereum <span className="float-right">(119)</span></li><li>Polygon <span className="float-right">(78)</span></li><li>Solana <span className="float-right">(86)</span></li></ul>
 
                         <div className="mt-4 overflow-hidden bg-[#241510]">
                             <h2 className="pt-4 text-center text-sm font-bold text-primary">NFT EM DESTAQUE</h2>
@@ -161,18 +144,46 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
                             />
                         </div>
                     </aside>
-                    <div className="col-span-2 grid grid-cols-2 items-start gap-x-4 gap-y-6 md:col-span-1 md:grid-cols-3 md:gap-5 lg:grid-cols-3">
-                    {paginatedNfts.map((nft) => (
-                        <NftCard
-                            key={nft.id}
-                            id={nft.id}
-                            imageUrl={nft.imageUrl}
-                            name={nft.name}
-                            priceEth={nft.priceEth}
-                            isRare={nft.isRare}
-                        />
-                    ))}
-                    {visibleNfts.length === 0 && <p className="col-span-full py-8 text-center text-xs text-text-muted">Nenhum NFT encontrado.</p>}
+                    <div className="col-span-2 min-w-0 md:col-span-1">
+                        <div className="mb-6 flex min-w-0 items-center justify-between gap-3">
+                            <NftTabs
+                                activeTab={activeTab}
+                                onChange={(tab) => {
+                                    setActiveTab(tab)
+                                    setPage(1)
+                                }}
+                            />
+
+                            <label className="hidden shrink-0 items-center gap-2 text-xs text-text-muted md:flex">
+                                <span className="hidden lg:inline">Ordenar por:</span>
+                                <select
+                                    value={orderBy}
+                                    onChange={(event) => {
+                                        setOrderBy(event.target.value)
+                                        setPage(1)
+                                    }}
+                                    className="rounded border border-border bg-surface-card px-2 py-2 text-xs text-foreground outline-none"
+                                >
+                                    <option value="recent">Mais recentes</option>
+                                    <option value="price-asc">Menor preço</option>
+                                    <option value="price-desc">Maior preço</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div className="grid grid-cols-2 items-start gap-x-4 gap-y-6 md:grid-cols-3 md:gap-5">
+                            {paginatedNfts.map((nft) => (
+                                <NftCard
+                                    key={nft.id}
+                                    id={nft.id}
+                                    imageUrl={nft.imageUrl}
+                                    name={nft.name}
+                                    priceEth={nft.priceEth}
+                                    isRare={nft.isRare}
+                                />
+                            ))}
+                            {visibleNfts.length === 0 && <p className="col-span-full py-8 text-center text-xs text-text-muted">Nenhum NFT encontrado.</p>}
+                        </div>
                     </div>
                 </div>
                 {pageCount > 1 && (

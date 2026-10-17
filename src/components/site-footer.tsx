@@ -20,7 +20,7 @@ const footerColumns = [
 
 export default function SiteFooter() {
     return (
-        <footer className="mx-auto mt-16 max-w-7xl overflow-hidden bg-[#241510] text-xs text-[#c8a989]">
+        <footer className="mx-auto mt-16 max-w-7xl overflow-hidden bg-[#241510] text-sm text-[#c8a989]">
             <section className="grid gap-7 p-7 md:grid-cols-4 md:gap-0">
                 {benefits.map(([letter, title, description]) => (
                     <div key={title} className="border-[#a86d38] md:border-r md:px-5 first:pl-0">

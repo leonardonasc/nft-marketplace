@@ -32,7 +32,7 @@ export default function CatalogJournal() {
                 <h2 id="journal-title" className="text-xl font-bold text-foreground md:text-2xl">
                     Diário da Cunhagem
                 </h2>
-                <p className="mt-2 text-[10px] text-text-muted">
+                <p className="mt-2 text-sm text-text-muted">
                     Histórias, guias e insights para colecionadores sobre o universo da propriedade digital.
                 </p>
             </div>
