@@ -5,7 +5,7 @@ import { Search, SlidersHorizontal, ArrowRight, ChevronLeft, ChevronRight } from
 import MobileNavbar from '@/components/mobile-navbar'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { NftTab } from '@/features/catalog/components/nft-tabs'
 import type { NftListResponse } from '@/types/nft'
 import CatalogHighlights from '@/features/catalog/components/catalog-highlights'
@@ -13,17 +13,37 @@ import CatalogJournal from '@/features/catalog/components/catalog-journal'
 import { queryClient } from '@/app/query-client'
 import { connectRealtime, subscribeRealtime } from '@/lib/socket'
 
+function readCatalogUrlState() {
+    const params = new URLSearchParams(window.location.search)
+    const tab = params.get('tab')
+    const orderBy = params.get('order')
+    const page = Number(params.get('page') ?? '1')
+
+    return {
+        tab: (tab === 'Novos lançamentos' || tab === 'Em alta' ? tab : 'Todos os NFTs') as NftTab,
+        search: params.get('q') ?? '',
+        page: Number.isInteger(page) && page > 0 ? page : 1,
+        orderBy: orderBy === 'price-asc' || orderBy === 'price-desc' ? orderBy : 'recent',
+        collection: params.get('collection') ?? 'Todas',
+        network: params.get('network') ?? 'Todas',
+        maxPrice: params.get('maxPrice') ?? '12.3',
+    }
+}
+
 export default function CatalogPage({ active = 'Início' }: { active?: string }) {
     const nftQuery = useNfts()
-    const [activeTab, setActiveTab] = useState<NftTab>('Todos os NFTs')
-    const [search, setSearch] = useState('')
+    const initialUrlState = readCatalogUrlState()
+    const [activeTab, setActiveTab] = useState<NftTab>(initialUrlState.tab)
+    const [search, setSearch] = useState(initialUrlState.search)
     const [filtersOpen, setFiltersOpen] = useState(false)
-    const [page, setPage] = useState(1)
-    const [orderBy, setOrderBy] = useState('recent')
-    const [collection, setCollection] = useState('Todas')
-    const [network, setNetwork] = useState('Todas')
-    const [maxPrice, setMaxPrice] = useState('12.3')
+    const [page, setPage] = useState(initialUrlState.page)
+    const [orderBy, setOrderBy] = useState(initialUrlState.orderBy)
+    const [collection, setCollection] = useState(initialUrlState.collection)
+    const [network, setNetwork] = useState(initialUrlState.network)
+    const [maxPrice, setMaxPrice] = useState(initialUrlState.maxPrice)
     const pageSize = 6
+    const hasMounted = useRef(false)
+    const restoringUrl = useRef(false)
 
     useEffect(() => {
         const socket = connectRealtime()
@@ -44,6 +64,45 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
             socket.disconnect()
         }
     }, [])
+
+    useEffect(() => {
+        const restoreFromUrl = () => {
+            restoringUrl.current = true
+            const next = readCatalogUrlState()
+            setActiveTab(next.tab)
+            setSearch(next.search)
+            setPage(next.page)
+            setOrderBy(next.orderBy)
+            setCollection(next.collection)
+            setNetwork(next.network)
+            setMaxPrice(next.maxPrice)
+        }
+
+        window.addEventListener('popstate', restoreFromUrl)
+        return () => window.removeEventListener('popstate', restoreFromUrl)
+    }, [])
+
+    useEffect(() => {
+        if (!hasMounted.current) {
+            hasMounted.current = true
+            return
+        }
+        if (restoringUrl.current) {
+            restoringUrl.current = false
+            return
+        }
+
+        const params = new URLSearchParams()
+        if (search) params.set('q', search)
+        if (collection !== 'Todas') params.set('collection', collection)
+        if (network !== 'Todas') params.set('network', network)
+        if (maxPrice !== '12.3') params.set('maxPrice', maxPrice)
+        if (orderBy !== 'recent') params.set('order', orderBy)
+        if (activeTab !== 'Todos os NFTs') params.set('tab', activeTab)
+        if (page > 1) params.set('page', String(page))
+        const query = params.toString()
+        window.history.pushState({}, '', query ? `${window.location.pathname}?${query}` : window.location.pathname)
+    }, [activeTab, collection, maxPrice, network, orderBy, page, search])
 
     const visibleNfts = useMemo(() => {
         const items = nftQuery.data?.items ?? []
@@ -102,7 +161,7 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
             <div className="mx-auto w-full max-w-7xl">
                 <SiteHeader active={active} />
                 <header className="mb-4">
-                    <div id="catalog-search" className="mb-5 flex w-full min-w-0 items-center gap-2 rounded-xl bg-surface-card px-3 py-2 text-xs text-text-muted md:hidden">
+                    <div id="catalog-search" className="md:hidden mb-5 flex w-full min-w-0 items-center gap-2 rounded-xl bg-surface-card px-3 py-2 text-xs text-text-muted">
                         <Search className="size-4" />
                         <input aria-label="Explorar coleções" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1) }} className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-muted" placeholder="Explorar coleções" />
                         <button

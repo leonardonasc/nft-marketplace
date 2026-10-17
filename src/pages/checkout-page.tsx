@@ -2,6 +2,7 @@ import { ArrowLeft, CheckCircle2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { clearCart, getCartItems, type CartItem } from '@/lib/cart'
 import { createOrder } from '@/lib/orders'
+import { quoteCart } from '@/lib/quote'
 import MobileNavbar from '@/components/mobile-navbar'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
@@ -20,6 +21,10 @@ export default function CheckoutPage() {
         setIsSubmitting(true)
         setError('')
         try {
+            const quote = await quoteCart(items)
+            if (quote.subtotal !== subtotal.toFixed(6)) {
+                throw new Error('QUOTE_CHANGED')
+            }
             const order = await createOrder(items, wallet)
             clearCart()
             window.location.href = `/confirmation?order=${order.id}`

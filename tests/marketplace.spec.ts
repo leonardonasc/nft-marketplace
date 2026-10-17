@@ -58,6 +58,37 @@ test('preserva o carrinho quando a carteira recusa o pagamento', async ({ page }
     await expect(page.getByText('Emerald Ape #042 (x 1)')).toBeVisible()
 })
 
+test('aplica um cupom válido no resumo do carrinho', async ({ page }) => {
+    await page.goto('/nft/nft-001')
+    await page.getByRole('button', { name: 'Adicionar ao carrinho' }).click()
+    await page.goto('/cart')
+    await page.getByPlaceholder('Digite o código promocional...').fill('KURIO10')
+    await page.getByRole('button', { name: 'Aplicar' }).click()
+    await expect(page.getByText('(-) 0.042 ETH')).toBeVisible()
+    await expect(page.getByText('0.394 ETH')).toBeVisible()
+})
+
+test('informa quando o cupom está expirado', async ({ page }) => {
+    await page.goto('/nft/nft-001')
+    await page.getByRole('button', { name: 'Adicionar ao carrinho' }).click()
+    await page.goto('/cart')
+    await page.getByPlaceholder('Digite o código promocional...').fill('EXPIRED')
+    await page.getByRole('button', { name: 'Aplicar' }).click()
+    await expect(page.getByRole('alert')).toHaveText('Este cupom expirou')
+})
+
+test('restaura busca e filtros do catálogo pela URL e pelo histórico', async ({ page }) => {
+    await page.goto('/?q=Emerald&order=price-desc')
+    const search = page.getByLabel('Explorar coleções')
+    await expect(search).toHaveValue('Emerald')
+    await expect(page.getByText('Emerald Ape #042')).toBeVisible()
+
+    await search.fill('Sage')
+    await expect(page).toHaveURL(/q=Sage/)
+    await page.goBack()
+    await expect(search).toHaveValue('Emerald')
+})
+
 test('exibe favoritos na lista de interesse da conta', async ({ page }) => {
     await page.addInitScript(() => {
         localStorage.setItem('kurio_session', JSON.stringify({ username: 'colecionador', email: 'colecionador@kurio.local' }))
