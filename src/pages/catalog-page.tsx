@@ -161,7 +161,7 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
             <div className="mx-auto w-full max-w-7xl">
                 <SiteHeader active={active} />
                 <header className="mb-4">
-                    <div id="catalog-search" className="mb-5 flex md:hidden w-full min-w-0 items-center gap-2 rounded-xl bg-surface-card px-3 py-2 text-xs text-text-muted">
+                    <div id="catalog-search" className="mb-5 flex w-full md:hidden min-w-0 items-center gap-2 rounded-xl bg-surface-card px-3 py-2 text-xs text-text-muted">
                         <Search className="size-4" />
                         <input aria-label="Explorar coleções" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1) }} className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-muted" placeholder="Explorar coleções" />
                         <button
@@ -177,19 +177,17 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
 
                     <div className="relative mb-8 h-[190px] w-full min-w-0 overflow-hidden rounded-[2rem] bg-[#271812] px-5 py-3 sm:h-[215px] sm:px-7 sm:py-4 md:h-[373px] md:rounded-none md:bg-[#160d0a] md:px-0 md:py-8">
 
-                        {/* Fundo mobile: somente duas formas circulares cruzadas */}
                         <div className="pointer-events-none absolute inset-0 overflow-hidden md:hidden">
                             <span className="absolute -left-[12%] -top-[75%] size-[280px] rounded-full bg-[#9b6137]/45" />
                             <span className="absolute -bottom-[105%] left-[18%] size-[330px] rounded-full bg-[#704323]/45" />
                         </div>
 
-                        {/* Conteúdo */}
                         <div className="relative z-10 w-[54%] md:w-[52%] md:pt-5">
                             <p className="mb-3 text-[10px] text-foreground md:mb-4 md:text-xs">
                                 Bem-vindo à Kurio
                             </p>
 
-                            <h1 className="text-[19px] font-bold leading-[1.25] tracking-wide text-foreground sm:text-[22px] md:text-5xl md:leading-[1.6] lg:text-6xl lg:leading-[1]">
+                            <h1 className="text-[19px] font-bold leading-[1.25] tracking-wide text-foreground sm:text-[22px] md:text-4xl md:leading-[1.2] lg:text-5xl lg:leading-[1]">
                                 <span className="md:hidden">
                                     SEJA DONO DA CULTURA DIGITAL
                                 </span>
@@ -198,7 +196,7 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
                                 </span>
                             </h1>
 
-                            <p className="mt-2 text-[10px] leading-[1.35] text-text-muted sm:text-[11px] md:mt-4 md:max-w-[640px] md:text-sm md:leading-5">
+                            <p className="mt-2 text-[10px] leading-[1.35] text-text-muted sm:text-[11px] md:mt-4 md:max-w-[640px] md:text-xs md:leading-5">
                                 <span className="md:hidden">
                                     Descubra NFTs selecionados de criadores do mundo todo.
                                 </span>
@@ -219,26 +217,19 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
                             </button>
                         </div>
 
-                        {/* Imagem principal */}
                         <img
                             src="/images/nft-001.png"
                             alt="NFT principal da coleção"
                             className="absolute right-3 top-3 z-0 size-[112px] rounded-xl object-cover sm:right-4 sm:top-4 sm:size-[135px] md:right-0 md:top-0 md:size-[340px] md:max-h-none md:max-w-none"
                         />
 
-                        {/* Imagem secundária: encaixada no canto inferior esquerdo */}
                         <img
                             src="/images/nft-002.png"
                             alt="Outro NFT da coleção"
                             className="absolute right-[calc(12px+112px-55px)] top-[calc(12px+112px-30px)] z-10 size-[43px] rounded-xl object-cover shadow-lg sm:right-[calc(16px+135px-48px)] sm:top-[calc(16px+135px-48px)] sm:size-[48px] md:hidden"
                         />
 
-                        {/* Indicadores */}
-                        <div className="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 gap-2 md:bottom-8">
-                            <span className="size-2 rounded-full bg-amber" />
-                            <span className="size-2 rounded-full bg-amber/60" />
-                            <span className="size-2 rounded-full bg-amber/60" />
-                        </div>
+
                     </div>
 
                 </header>
