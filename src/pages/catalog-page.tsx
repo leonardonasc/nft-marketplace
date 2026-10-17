@@ -5,10 +5,13 @@ import { Search, SlidersHorizontal, ArrowRight, ChevronLeft, ChevronRight } from
 import MobileNavbar from '@/components/mobile-navbar'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { NftTab } from '@/features/catalog/components/nft-tabs'
+import type { NftListResponse } from '@/types/nft'
 import CatalogHighlights from '@/features/catalog/components/catalog-highlights'
 import CatalogJournal from '@/features/catalog/components/catalog-journal'
+import { queryClient } from '@/app/query-client'
+import { connectRealtime, subscribeRealtime } from '@/lib/socket'
 
 export default function CatalogPage({ active = 'Início' }: { active?: string }) {
     const nftQuery = useNfts()
@@ -21,6 +24,26 @@ export default function CatalogPage({ active = 'Início' }: { active?: string })
     const [network, setNetwork] = useState('Todas')
     const [maxPrice, setMaxPrice] = useState('12.3')
     const pageSize = 6
+
+    useEffect(() => {
+        const socket = connectRealtime()
+        const unsubscribe = subscribeRealtime('nft.updated', (event) => {
+            queryClient.setQueriesData<NftListResponse>(
+                { queryKey: ['nfts'] },
+                (data) => data && {
+                    ...data,
+                    items: data.items.map((nft) => nft.id === event.resourceId
+                        ? { ...nft, priceEth: event.priceEth, availableQuantity: event.availableQuantity }
+                        : nft),
+                },
+            )
+        })
+
+        return () => {
+            unsubscribe()
+            socket.disconnect()
+        }
+    }, [])
 
     const visibleNfts = useMemo(() => {
         const items = nftQuery.data?.items ?? []

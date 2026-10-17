@@ -7,9 +7,12 @@ export default defineConfig({
         trace: 'on-first-retry',
     },
     webServer: {
-        command: 'bun run dev --host 127.0.0.1',
+        command: 'bun run dev --host 127.0.0.1 --port 4173',
         url: 'http://127.0.0.1:4173',
         reuseExistingServer: true,
     },
-    projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+    projects: [
+        { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+        { name: 'mobile-chromium', use: { ...devices['Pixel 5'] } },
+    ],
 })

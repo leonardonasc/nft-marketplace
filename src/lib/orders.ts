@@ -1,7 +1,10 @@
 import type { CartItem } from './cart'
+import { apiClient } from './api-client'
+import { migrateLegacyStorage, scopedStorageKey } from './storage'
 
 export type Order = {
     id: string
+    status: 'pending' | 'confirmed' | 'rejected'
     createdAt: string
     wallet: string
     items: CartItem[]
@@ -14,23 +17,18 @@ export type Order = {
 const ORDERS_KEY = 'kurio_orders'
 const LAST_ORDER_KEY = 'kurio_last_order'
 
-export function createOrder(items: CartItem[], wallet: string): Order {
-    const subtotal = items.reduce((sum, item) => sum + Number(item.nft.priceEth) * item.quantity, 0)
-    const fee = items.length ? 0.016 : 0
-    const order: Order = {
-        id: createId(),
-        createdAt: new Date().toISOString(),
+export async function createOrder(items: CartItem[], wallet: string): Promise<Order> {
+    const idempotencyKey = createId()
+    const { data: order } = await apiClient.post<Order>('/orders', {
         wallet,
-        items: items.map((item) => ({ ...item })),
-        subtotal,
-        fee,
-        total: subtotal + fee,
-        transactionId: `0x${createId().replaceAll('-', '').slice(0, 12).toUpperCase()}`,
-    }
+        items: items.map(({ nft, quantity }) => ({ nftId: nft.id, quantity })),
+    }, {
+        headers: { 'Idempotency-Key': idempotencyKey },
+    })
 
     const orders = getOrders()
-    localStorage.setItem(ORDERS_KEY, JSON.stringify([...orders, order]))
-    localStorage.setItem(LAST_ORDER_KEY, order.id)
+    localStorage.setItem(scopedStorageKey(ORDERS_KEY), JSON.stringify([...orders, order]))
+    localStorage.setItem(scopedStorageKey(LAST_ORDER_KEY), order.id)
     return order
 }
 
@@ -39,15 +37,17 @@ export function getOrder(id: string): Order | null {
 }
 
 export function getLastOrder(): Order | null {
-    const id = localStorage.getItem(LAST_ORDER_KEY)
+    migrateLegacyStorage(LAST_ORDER_KEY)
+    const id = localStorage.getItem(scopedStorageKey(LAST_ORDER_KEY))
     return id ? getOrder(id) : null
 }
 
 function getOrders(): Order[] {
     if (typeof window === 'undefined') return []
+    migrateLegacyStorage(ORDERS_KEY)
 
     try {
-        return JSON.parse(localStorage.getItem(ORDERS_KEY) ?? '[]') as Order[]
+        return JSON.parse(localStorage.getItem(scopedStorageKey(ORDERS_KEY)) ?? '[]') as Order[]
     } catch {
         return []
     }

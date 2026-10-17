@@ -2,12 +2,17 @@ import { ArrowLeft, Minus, Plus, Trash2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { nftFixtures } from '@/mocks/fixtures'
 import { getCartItems, removeFromCart, updateCartQuantity, type CartItem } from '@/lib/cart'
+import { quoteCart } from '@/lib/quote'
 import MobileNavbar from '@/components/mobile-navbar'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
 
 export default function CartPage() {
     const [items, setItems] = useState<CartItem[]>(getCartItems)
+    const [coupon, setCoupon] = useState('')
+    const [discount, setDiscount] = useState(0)
+    const [quoteError, setQuoteError] = useState('')
+    const [isApplyingCoupon, setIsApplyingCoupon] = useState(false)
     const networkFee = 0.016
     const subtotal = useMemo(() => items.reduce((sum, item) => sum + Number(item.nft.priceEth) * item.quantity, 0), [items])
 
@@ -19,6 +24,21 @@ export default function CartPage() {
     function removeItem(id: string) {
         removeFromCart(id)
         setItems(getCartItems())
+    }
+
+    async function applyCoupon() {
+        setIsApplyingCoupon(true)
+        setQuoteError('')
+        try {
+            const quote = await quoteCart(items, coupon)
+            setDiscount(Number(quote.discount))
+            setCoupon(quote.coupon ?? '')
+        } catch (error) {
+            setDiscount(0)
+            setQuoteError(getQuoteError(error))
+        } finally {
+            setIsApplyingCoupon(false)
+        }
     }
 
     return (
@@ -44,8 +64,9 @@ export default function CartPage() {
                     </section>
                     <aside className="h-fit rounded-xl p-0 lg:pl-2">
                         <h2 className="mb-5 font-bold">Resumo da carteira</h2>
-                        <div className="flex"><input className="input-kurio min-w-0 flex-1" placeholder="Digite o código promocional..." /><button className="rounded-r bg-primary px-4 text-xs font-bold text-ink">Aplicar</button></div>
-                        <dl className="mt-5 space-y-3 text-xs"><div className="flex justify-between"><dt>Subtotal</dt><dd>{subtotal.toFixed(2)} ETH</dd></div><div className="flex justify-between"><dt>Desconto do lançamento</dt><dd>(-) 00.00</dd></div><div className="flex justify-between"><dt>Taxa de rede</dt><dd>{subtotal ? networkFee.toFixed(3) : '0.000'} ETH</dd></div><div className="flex justify-between border-t border-border pt-3 font-bold"><dt>Total</dt><dd className="text-amber">{(subtotal ? subtotal + networkFee : 0).toFixed(3)} ETH</dd></div></dl>
+                        <div className="flex"><input value={coupon} onChange={(event) => setCoupon(event.target.value)} className="input-kurio min-w-0 flex-1" placeholder="Digite o código promocional..." /><button type="button" onClick={applyCoupon} disabled={isApplyingCoupon || !items.length} className="rounded-r bg-primary px-4 text-xs font-bold text-ink disabled:opacity-50">{isApplyingCoupon ? '...' : 'Aplicar'}</button></div>
+                        {quoteError && <p role="alert" className="mt-2 text-xs text-red-300">{quoteError}</p>}
+                        <dl className="mt-5 space-y-3 text-xs"><div className="flex justify-between"><dt>Subtotal</dt><dd>{subtotal.toFixed(2)} ETH</dd></div><div className="flex justify-between"><dt>Desconto do lançamento</dt><dd>{discount ? `(-) ${discount.toFixed(3)} ETH` : '(-) 00.00'}</dd></div><div className="flex justify-between"><dt>Taxa de rede</dt><dd>{subtotal ? networkFee.toFixed(3) : '0.000'} ETH</dd></div><div className="flex justify-between border-t border-border pt-3 font-bold"><dt>Total</dt><dd className="text-amber">{(subtotal ? subtotal - discount + networkFee : 0).toFixed(3)} ETH</dd></div></dl>
                         <button disabled={!items.length} onClick={() => (window.location.href = '/checkout')} className="mt-6 w-full rounded-md bg-primary py-3 text-xs font-bold text-ink disabled:cursor-not-allowed disabled:opacity-40">Conectar e finalizar</button>
                         <button type="button" onClick={() => (window.location.href = '/mercado')} className="mt-3 w-full text-xs text-primary">Continuar explorando</button>
                     </aside>
@@ -55,4 +76,15 @@ export default function CartPage() {
             <SiteFooter /><MobileNavbar />
         </main>
     )
+}
+
+function getQuoteError(error: unknown) {
+    if (typeof error === 'object' && error !== null && 'response' in error) {
+        const response = error.response
+        if (typeof response === 'object' && response !== null && 'data' in response) {
+            const data = response.data
+            if (typeof data === 'object' && data !== null && 'message' in data && typeof data.message === 'string') return data.message
+        }
+    }
+    return 'Não foi possível calcular o resumo.'
 }

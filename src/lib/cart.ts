@@ -1,5 +1,6 @@
 import type { Nft } from '@/types/nft'
 import { nftFixtures } from '@/mocks/fixtures'
+import { migrateLegacyStorage, scopedStorageKey } from './storage'
 
 export type CartItem = {
     nft: Nft
@@ -10,9 +11,10 @@ const CART_KEY = 'kurio_cart'
 
 export function getCartItems(): CartItem[] {
     if (typeof window === 'undefined') return []
+    migrateLegacyStorage(CART_KEY)
 
     try {
-        const stored = JSON.parse(localStorage.getItem(CART_KEY) ?? '[]') as Array<{ nftId: string; quantity: number }>
+        const stored = JSON.parse(localStorage.getItem(scopedStorageKey(CART_KEY)) ?? '[]') as Array<{ nftId: string; quantity: number }>
         return stored.flatMap(({ nftId, quantity }) => {
             const nft = requireNft(nftId)
             return nft && quantity > 0 ? [{ nft, quantity }] : []
@@ -50,7 +52,12 @@ export function getCartCount() {
 }
 
 function saveCart(items: CartItem[]) {
-    localStorage.setItem(CART_KEY, JSON.stringify(items.map(({ nft, quantity }) => ({ nftId: nft.id, quantity }))))
+    localStorage.setItem(scopedStorageKey(CART_KEY), JSON.stringify(items.map(({ nft, quantity }) => ({ nftId: nft.id, quantity }))))
+    window.dispatchEvent(new Event('kurio-cart-updated'))
+}
+
+export function clearCart() {
+    localStorage.removeItem(scopedStorageKey(CART_KEY))
     window.dispatchEvent(new Event('kurio-cart-updated'))
 }
 

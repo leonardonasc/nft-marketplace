@@ -2,6 +2,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebookF } from 'react-icons/fa'
+import { loginAccount, loginWithProvider, registerAccount } from '@/lib/auth'
 
 type AuthPageProps = { mode: 'login' | 'register' }
 
@@ -14,8 +15,9 @@ export default function AuthPage({ mode }: AuthPageProps) {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
+        setNotice('')
 
         if (isRegister) {
             if (password.length < 6) {
@@ -28,27 +30,30 @@ export default function AuthPage({ mode }: AuthPageProps) {
                 return
             }
 
-            localStorage.setItem('kurio_user', JSON.stringify({ username, email, password }))
-            localStorage.setItem('kurio_session', JSON.stringify({ username, email }))
+            try {
+                await registerAccount(username, email, password)
+                window.location.href = '/'
+            } catch (error) {
+                setNotice(getAuthError(error))
+            }
+            return
+        }
+
+        try {
+            await loginAccount(email, password)
             window.location.href = '/'
-            return
+        } catch (error) {
+            setNotice(getAuthError(error))
         }
-
-        const savedUser = localStorage.getItem('kurio_user')
-        const user = savedUser ? JSON.parse(savedUser) as { username: string; email: string; password: string } : null
-
-        if (!user || user.email !== email || user.password !== password) {
-            setNotice('E-mail ou senha inválidos. Crie uma conta ou tente novamente.')
-            return
-        }
-
-        localStorage.setItem('kurio_session', JSON.stringify({ username: user.username, email: user.email }))
-        window.location.href = '/'
     }
 
-    function handleSocialLogin(provider: string) {
-        localStorage.setItem('kurio_session', JSON.stringify({ username: provider, email: `${provider.toLowerCase()}@kurio.local` }))
-        window.location.href = '/'
+    async function handleSocialLogin(provider: string) {
+        try {
+            await loginWithProvider(provider)
+            window.location.href = '/'
+        } catch (error) {
+            setNotice(getAuthError(error))
+        }
     }
 
     return (
@@ -108,7 +113,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
 
                 <div className="mx-auto my-8 flex max-w-75 items-center gap-2 text-[10px] text-text-muted"><span className="h-px flex-1 bg-border" />Ou continue com<span className="h-px flex-1 bg-border" /></div>
                 {notice && <p role="status" className="mb-3 text-center text-[10px] text-amber">{notice}</p>}
-                    <div className="mx-auto max-w-75 space-y-2">
+                <div className="mx-auto max-w-75 space-y-2">
                     <button
                         type="button"
                         onClick={() => handleSocialLogin('Google')}
@@ -126,11 +131,23 @@ export default function AuthPage({ mode }: AuthPageProps) {
                         <FaFacebookF size={15} className="text-[#1877F2]" />
                         Continuar com Facebook
                     </button>
-                    </div>
+                </div>
                 <button type="button" onClick={() => (window.location.href = isRegister ? '/login' : '/register')} className="mt-8 w-full text-center text-xs text-secondary">
                     {isRegister ? 'Já tem uma conta? Entre' : 'Novo na Kurio? Crie uma conta'}
                 </button>
             </section>
         </main>
     )
+}
+
+function getAuthError(error: unknown) {
+    if (typeof error === 'object' && error !== null && 'response' in error) {
+        const response = error.response
+        if (typeof response === 'object' && response !== null && 'data' in response) {
+            const data = response.data
+            if (typeof data === 'object' && data !== null && 'message' in data && typeof data.message === 'string') return data.message
+        }
+    }
+
+    return 'Não foi possível concluir a autenticação. Tente novamente.'
 }

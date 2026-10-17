@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
 import MobileNavbar from '@/components/mobile-navbar'
-import { clearSession, getSession } from '@/lib/auth'
+import { changePasswordAccount, clearSession, getSession, updateProfile } from '@/lib/auth'
 import { getFavorites } from '@/lib/favorites'
 import NftCard from '@/features/catalog/components/nft-card'
 import { nftFixtures } from '@/mocks/fixtures'
@@ -61,35 +61,33 @@ export default function AccountPage() {
         }
     }, [])
 
-    function saveProfile(event: React.FormEvent<HTMLFormElement>) {
+    async function saveProfile(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        const stored = localStorage.getItem('kurio_user')
-        const user = stored ? JSON.parse(stored) as { username: string; email: string; password: string } : null
-        if (user) {
-            localStorage.setItem('kurio_user', JSON.stringify({ ...user, username, email }))
+        if (!session) return
+
+        try {
+            await updateProfile(session.email, username, email)
+            setNotice('Dados do perfil salvos.')
+        } catch {
+            setNotice('Não foi possível salvar os dados do perfil.')
         }
-        localStorage.setItem('kurio_session', JSON.stringify({ username, email }))
-        window.dispatchEvent(new Event('kurio-session-changed'))
-        setNotice('Dados do perfil salvos.')
     }
 
-    function changePassword(event: React.FormEvent<HTMLFormElement>) {
+    async function changePassword(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        const stored = localStorage.getItem('kurio_user')
-        const user = stored ? JSON.parse(stored) as { username: string; email: string; password: string } : null
-        if (!user || user.password !== currentPassword) {
-            setNotice('A senha atual não confere.')
-            return
-        }
         if (newPassword.length < 6 || newPassword !== confirmPassword) {
             setNotice('A nova senha precisa ter 6 caracteres e coincidir na confirmação.')
             return
         }
-        localStorage.setItem('kurio_user', JSON.stringify({ ...user, password: newPassword }))
-        setCurrentPassword('')
-        setNewPassword('')
-        setConfirmPassword('')
-        setNotice('Senha alterada com sucesso.')
+        try {
+            await changePasswordAccount(session?.email ?? email, currentPassword, newPassword)
+            setCurrentPassword('')
+            setNewPassword('')
+            setConfirmPassword('')
+            setNotice('Senha alterada com sucesso.')
+        } catch {
+            setNotice('A senha atual não confere.')
+        }
     }
 
     function logout() {
